@@ -7,8 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitMQConsumer {
 
-	@RabbitListener(queues = "${rabbitmq.queue:test.rabbit.queue}")
+	@RabbitListener(queues = "${rabbitmq.queue:test.rabbit.queue}", containerFactory = "rabbitListenerContainer")
 	public void receiveMessage(Person person) {
+		if(person.getName().equalsIgnoreCase("Umar")) {
+			throw new IllegalArgumentException();
+		}
 		System.out.printf("Received message from queue: %s%n", person.toString());
 	}
 }
